@@ -5,23 +5,19 @@
 // Number of vertices in the graph
 #define V 5
 
-// A utility function to find the vertex with
-// minimum key value, from the set of vertices
-// not yet included in MST
-int minKey(int distance[], bool visited[]) {
-
-  // Initialize min value
+int getMinEdgeVertex(int distance[], bool visited[]) {
   int min = INT_MAX, min_index;
 
-  for (int v = 0; v < V; v++)
-    if (visited[v] == false && distance[v] < min)
-      min = distance[v], min_index = v;
+  for (int v = 0; v < V; v++) {
+    if (visited[v] == false && distance[v] < min) {
+      min = distance[v];
+      min_index = v;
+    }
+  }
 
   return min_index;
 }
 
-// A utility function to print the
-// constructed MST stored in parent[]
 void printMST(int parent[], int graph[V][V]) {
   printf("Edge \tWeight\n");
   for (int i = 1; i < V; i++) {
@@ -29,58 +25,33 @@ void printMST(int parent[], int graph[V][V]) {
   }
 }
 
-// Function to construct and print MST for
-// a graph represented using adjacency
-// matrix representation
 void primMST(int graph[V][V]) {
-
-  // Array to store constructed MST
   int parent[V];
-  // Key values used to pick minimum weight edge in cut
   int distance[V];
-  // To represent set of vertices included in MST
   bool visited[V];
 
   // Initialize all keys as INFINITE
   for (int i = 0; i < V; i++) {
-    distance[i] = INT_MAX, visited[i] = false;
+    distance[i] = INT_MAX;
+    visited[i] = false;
   }
-
-  // Always include first 1st vertex in MST.
-  // Make key 0 so that this vertex is picked as first
-  // vertex.
+  // and initial node to 0
   distance[0] = 0;
-
-  // First node is always root of MST
   parent[0] = -1;
 
-  // The MST will have V vertices
+  // For all vertices of the graph (starting from any vertex )
   for (int count = 0; count < V - 1; count++) {
-
-    // Pick the minimum key vertex from the
-    // set of vertices not yet included in MST
-    int u = minKey(distance, visited);
-
-    // Add the picked vertex to the MST Set
+    int u = getMinEdgeVertex(distance, visited);
     visited[u] = true;
 
-    // Update key value and parent index of
-    // the adjacent vertices of the picked vertex.
-    // Consider only those vertices which are not
-    // yet included in MST
+    // Relax all vertices from the minimum edge
     for (int v = 0; v < V; v++)
-
-      // graph[u][v] is non zero only for adjacent
-      // vertices of m visited[v] is false for vertices
-      // not yet included in MST Update the key only
-      // if graph[u][v] is smaller than distance[]
       if (graph[u][v] && visited[v] == false && graph[u][v] < distance[v]) {
         distance[v] = graph[u][v];
         parent[v] = u;
       }
   }
 
-  // print the constructed MST
   printMST(parent, graph);
 }
 
@@ -91,7 +62,6 @@ int main() {
                      {6, 8, 0, 0, 9},
                      {0, 5, 7, 9, 0}};
 
-  // Print the solution
   primMST(graph);
 
   return 0;
