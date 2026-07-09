@@ -44,7 +44,7 @@ void primMST(int graph[V][V]) {
     int u = getMinEdgeVertex(distance, visited);
     visited[u] = true;
 
-    // Relax all vertices from the minimum edge
+    // Relax all vertices from the minimum edge vertex
     for (int v = 0; v < V; v++)
       if (graph[u][v] && visited[v] == false && graph[u][v] < distance[v]) {
         distance[v] = graph[u][v];
